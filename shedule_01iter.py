@@ -34,13 +34,26 @@ def save():
         print(theBestShedule.fitness(), file=f)
 
 
+def isBestCell(x):
+    l = len(sheduling.times)
+    d = x // l
+    x = x % l
+    return x != 0 and x != 1 and x != (l - 2) and x != (l - 1) and (d % 6) != 5
+
+
+# оптимизация. Не используем утро, вечер( крайние отрезки времени) и субботу
+cells = list(filter(isBestCell, range(cellsCount)))
+rcells = list(filter(isBestCell, range(cellsCount - 1, -1, -1)))
+print(cells)
+print(rcells)
+
 shedule = sheduling.GlobalShedule()
-length1 = permCount(cellsCount, len(sheduling.lessons1))
-length2 = permCount(cellsCount, len(sheduling.lessons2))
+length1 = permCount(len(cells), len(sheduling.lessons1))
+length2 = permCount(len(rcells), len(sheduling.lessons2))
 length = int(length1 * length2)
 
-for lessonIndexes1 in permutations(range(cellsCount), len(sheduling.lessons1)):
-    for lessonIndexes2 in permutations(range(cellsCount - 1, -1, -1), len(sheduling.lessons2)):
+for lessonIndexes1 in permutations(cells, len(sheduling.lessons1)):
+    for lessonIndexes2 in permutations(rcells, len(sheduling.lessons2)):
         # print("Iter ", i)
         i += 1
         shedule.for248 = convert(sheduling.lessons1, lessonIndexes1)
@@ -48,9 +61,9 @@ for lessonIndexes1 in permutations(range(cellsCount), len(sheduling.lessons1)):
 
         if shedule.isValid():
             fitness = shedule.fitness()
-            print("Check ", i, "/", length, " shedule with fitness ", fitness)
+            # print("Check ", i, "/", length, " shedule with fitness ", fitness)
             if fitness > maxFitness:
-                print("New best shedule!")
+                print("New best shedule ", i, "/", length, " shedule with fitness ", fitness)
                 theBestShedule = shedule
                 maxFitness = fitness
                 save()
