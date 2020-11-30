@@ -215,9 +215,11 @@ def genetic():
         print("\n")
 
     print("Лучший представитель")
-    print(evolution.pool[0])
+    theBest = evolution.pool[0]
+    print(theBest)
+    evolution = Evolution(10, generate)
+    print(tournament([theBest, *evolution.pool]))
 
 
-test()
-
-# genetic()
+# test()
+genetic()

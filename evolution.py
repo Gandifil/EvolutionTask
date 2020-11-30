@@ -19,6 +19,8 @@ class Evolution(object):
         oldCount = len(self.pool)
         self.pool = [self.pool[i] for i in range(len(self.pool)) if f(self.points[i])]
         print('Произведена селекция по значению функции приспособленности. Было {}, стало {}.'.format(oldCount, len(self.pool)))
+        return oldCount != len(self.pool)
+
 
     def mutate(self):
         for x in self.pool:

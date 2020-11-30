@@ -1,5 +1,6 @@
 import evolution
 import sheduling
+import random
 import statistics
 
 
@@ -19,7 +20,8 @@ for generation in range(generationCount):
     while len(evolution.pool) > 1000:
         points = evolution.fitness()
         median = statistics.median(points)
-        evolution.selectionByFitness(lambda fitness: fitness >= median)
+        if not evolution.selectionByFitness(lambda fitness: fitness >= median):
+            evolution.selectionIf(lambda x: random.choice([True, False]))
 
     print("\n")
 
